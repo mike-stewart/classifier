@@ -20,8 +20,8 @@ class String
   # interned, and indexes to its frequency in the document.  
 	def word_hash
 		word_hash = clean_word_hash()
-		symbol_hash = word_hash_for_symbols(gsub(/[\w]/," ").split)
-		return word_hash.merge(symbol_hash)
+		#symbol_hash = word_hash_for_symbols(gsub(/[\w]/," ").split)
+		#return word_hash.merge(symbol_hash)
 	end
 
 	# Return a word hash without extra punctuation or short symbols, just stemmed words
