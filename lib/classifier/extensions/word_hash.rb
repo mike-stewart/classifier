@@ -26,7 +26,7 @@ class String
 
 	# Return a word hash without extra punctuation or short symbols, just stemmed words
 	def clean_word_hash
-		word_hash_for_words gsub(/[^\w\s]/,"").split
+		word_hash_for_words gsub(/[\/\\-]/," ").gsub(/[^\w\s]/,"").split
 	end
 	
 	private
