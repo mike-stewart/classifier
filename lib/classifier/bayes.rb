@@ -64,17 +64,25 @@ class Bayes
 	# The largest of these scores (the one closest to 0) is the one picked out by #classify
 	def classifications(text)
 		score = Hash.new
-                training_count = @category_counts.values.inject { |x,y| x+y }.to_f
+		training_count = @category_counts.values.inject { |x,y| x+y }.to_f
 		@categories.each do |category, category_words|
 			score[category.to_s] = 0
 			total = category_words.values.inject(0) {|sum, element| sum+element}
+
+			match = false
 			text.word_hash.each do |word, count|
-				s = category_words.has_key?(word) ? category_words[word] : 0.1
+				if category_words.has_key?(word)
+					s = category_words[word]
+					match = true
+				else
+					s = 0.1
+				end
 				score[category.to_s] += Math.log(s/total.to_f)
 			end
-                        # now add prior probability for the category
-                        s = @category_counts.has_key?(category) ? @category_counts[category] : 0.1
-                        score[category.to_s] += Math.log(s / training_count)
+			# now add prior probability for the category
+			s = @category_counts.has_key?(category) ? @category_counts[category] : 0.1
+			score[category.to_s] += Math.log(s / training_count)
+			score[category.to_s] -= 100 unless match #Indicates we're making a wild guess 
 		end
 		return score
 	end
