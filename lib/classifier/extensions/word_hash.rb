@@ -30,13 +30,12 @@ class String
 	end
 	
 	private
-	
+
 	def word_hash_for_words(words)
 		d = Hash.new(0)
 		words.each do |word|
-			word.downcase!
-			if ! CORPUS_SKIP_WORDS.include?(word) && word.length > 2
-				d[word.stem.intern] += 1
+			if (!CORPUS_SKIP_WORDS.include?(word.downcase) && word.length > 2) || (CORPUS_ALLOW_ACRONYMS.include?(word))
+				d[word.downcase.stem.intern] += 1
 			end
 		end
 		return d
@@ -50,6 +49,13 @@ class String
 		end
 		return d
 	end
+
+	CORPUS_ALLOW_ACRONYMS = Set.new([
+			"HR",
+			"IT",
+			"VP",
+			"PR"
+	])
 	
 	CORPUS_SKIP_WORDS = Set.new([
       "a",
@@ -131,6 +137,6 @@ class String
       "within",
       "yes",
       "you",
-      "youll",
+      "youll"
       ])
 end
