@@ -93,7 +93,12 @@ class Bayes
   #    b.classify "I hate bad words and you"
   #    =>  'Uninteresting'
 	def classify(text)
-		(classifications(text).sort_by { |a| -a[1] })[0][0]
+		classifications = classifications(text).sort_by { |a| -a[1] }
+		if classifications[0][1] > -40
+			classifications[0][0]
+		else
+			'other'
+		end
 	end
 	
 	#
