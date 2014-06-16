@@ -54,7 +54,8 @@ class String
 			"HR",
 			"IT",
 			"VP",
-			"PR"
+			"PR",
+			"EA"
 	])
 	
 	CORPUS_SKIP_WORDS = Set.new([
