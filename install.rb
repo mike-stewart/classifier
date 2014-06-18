@@ -20,7 +20,7 @@ end
 
 makedirs = %w{ classifier }
 makedirs = %w{ classifier/extensions }
-makedirs = %w{ classifier/lsi }
+# makedirs = %w{ classifier/lsi }
 makedirs.each {|f| File::makedirs(File.join($sitedir, *f.split(/\//)))}
 
 Dir.chdir("lib")
