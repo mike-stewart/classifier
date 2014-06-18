@@ -7,10 +7,9 @@ Gem::Specification.new do |spec|
   spec.name          = "classifier"
   spec.version       = Classifier::VERSION
   spec.authors       = ["Lucas Carlson, Mike Stewart"]
-  spec.description   = "A general classifier module to allow Bayesian and other types of classifications."
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.summary       = "A general classifier module to allow Bayesian and other types of classifications."
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = "GNU LGPL"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
