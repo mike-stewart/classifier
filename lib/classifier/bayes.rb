@@ -77,11 +77,11 @@ class Bayes
 				else
 					s = 0.1
 				end
-				score[category.to_s] += Math.log(s/total.to_f)
+				score[category.to_s] += Math.log(s.quo(total.to_f))
 			end
 			# now add prior probability for the category
 			s = @category_counts.has_key?(category) ? @category_counts[category] : 0.1
-			score[category.to_s] += Math.log(s / training_count)
+			score[category.to_s] += Math.log(s.quo(training_count))
 			score[category.to_s] -= 100 unless match #Indicates we're making a wild guess 
 		end
 		return score

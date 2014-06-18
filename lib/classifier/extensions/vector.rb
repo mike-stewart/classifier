@@ -4,7 +4,7 @@
 # These are extensions to the std-lib 'matrix' to allow an all ruby SVD
 
 require 'matrix'
-require 'mathn'
+# require 'mathn'
 
 class Array
   def sum(identity = 0, &block)
@@ -22,7 +22,7 @@ class Vector
   def magnitude
     sumsqs = 0.0
     self.size.times do |i|
-      sumsqs += self[i] ** 2.0 
+      sumsqs += power(self[i], 2.0)
     end
     Math.sqrt(sumsqs)
   end
@@ -31,11 +31,86 @@ class Vector
     mag = self.magnitude
     self.size.times do |i|
 
-      nv << (self[i] / mag)
+      nv << self[i].quo(mag)
 
     end
     Vector[*nv]
   end
+
+  def power(x,y)
+    if x.kind_of?(Float)
+      if x < 0 && y.round != y
+        Complex(x, 0.0) ** y
+      else
+        x ** y
+      end
+    elsif x.kind_of?(Bignum) || x.kind_of?(Fixnum)
+      if x < 0 && y.round != y
+        Complex(x, 0.0) ** y
+      else
+        x ** y
+      end
+    elsif y.kind_of?(Rational)
+      other2 = y
+      if x < 0
+        return Complex(x, 0.0) ** y
+      elsif y == 0
+        return Rational(1,1)
+      elsif x == 0
+        return Rational(0,1)
+      elsif x == 1
+        return Rational(1,1)
+      end
+
+      npd = numerator.prime_division
+      dpd = denominator.prime_division
+      if y < 0
+        y = -y
+        npd, dpd = dpd, npd
+      end
+
+      for elm in npd
+        elm[1] = elm[1] * y
+        if !elm[1].kind_of?(Integer) and elm[1].denominator != 1
+          return power(Float(x), other2)
+        end
+        elm[1] = elm[1].to_i
+      end
+
+      for elm in dpd
+        elm[1] = elm[1] * y
+        if !elm[1].kind_of?(Integer) and elm[1].denominator != 1
+          return power(Float(x), other2)
+        end
+        elm[1] = elm[1].to_i
+      end
+
+      num = Integer.from_prime_division(npd)
+      den = Integer.from_prime_division(dpd)
+
+      Rational(num,den)
+
+    elsif y.kind_of?(Integer)
+      if y > 0
+        num = power(numerator, y)
+        den = power(denominator, y)
+      elsif y < 0
+        num = power(denominator, -y)
+        den = power(numerator, -y)
+      elsif y == 0
+        num = 1
+        den = 1
+      end
+      Rational(num, den)
+    elsif y.kind_of?(Float)
+      power(Float(x), y)
+    else
+      x , y = y.coerce(self)
+      power(x, y)
+    end
+
+  end
+
 end
 
 class Matrix
@@ -65,7 +140,8 @@ class Matrix
       for row in (0...qrot.row_size-1) do
         for col in (1..qrot.row_size-1) do
           next if row == col
-          h = Math.atan((2 * qrot[row,col])/(qrot[row,row]-qrot[col,col]))/2.0
+          a = (2 * qrot[row,col]).quo(qrot[row,row]-qrot[col,col])
+          h = Math.atan(a)/2.0
           hcos = Math.cos(h)
           hsin = Math.sin(h)
           mzrot = Matrix.identity(qrot.row_size)

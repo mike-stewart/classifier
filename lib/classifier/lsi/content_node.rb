@@ -52,10 +52,10 @@ module Classifier
         weighted_total = 0.0
         vec.each do |term|
           if ( term > 0 )
-            weighted_total += (( term / total_words ) * Math.log( term / total_words ))
+            weighted_total += (Rational( term, total_words ) * Math.log( Rational(term, total_words) ))
           end
         end 
-        vec = vec.collect { |val| Math.log( val + 1 ) / -weighted_total }
+        vec = vec.collect { |val| Rational(Math.log( val + 1 ) , -weighted_total) }
       end
       
       if $GSL
