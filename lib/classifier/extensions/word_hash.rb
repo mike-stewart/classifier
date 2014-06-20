@@ -51,11 +51,12 @@ class String
 	end
 
 	CORPUS_ALLOW_ACRONYMS = Set.new([
-			"HR",
+			"HR","hr",
 			"IT",
-			"VP",
-			"PR",
-			"EA"
+			"VP","vp",
+			"PR","pr",
+			"EA",
+      "GM"
 	])
 	
 	CORPUS_SKIP_WORDS = Set.new([
