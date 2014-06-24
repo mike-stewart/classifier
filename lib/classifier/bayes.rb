@@ -25,7 +25,7 @@ class Bayes
 	def train(category, text)
 		category = category.prepare_category_name
                 @category_counts[category] += 1
-		text.word_hash.each do |word, count|
+		text.clean_word_hash.each do |word, count|
 			@categories[category][word]     ||=     0
 			@categories[category][word]      +=     count
 			@total_words += count
@@ -43,7 +43,7 @@ class Bayes
 	def untrain(category, text)
 		category = category.prepare_category_name
                 @category_counts[category] -= 1
-		text.word_hash.each do |word, count|
+		text.clean_word_hash.each do |word, count|
 			if @total_words >= 0
 				orig = @categories[category][word]
 				@categories[category][word]     ||=     0
@@ -70,7 +70,7 @@ class Bayes
 			total = category_words.values.inject(0) {|sum, element| sum+element}
 
 			match = false
-			text.word_hash.each do |word, count|
+			text.clean_word_hash.each do |word, count|
 				if category_words.has_key?(word)
 					s = category_words[word]
 					match = true
